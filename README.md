@@ -1,29 +1,68 @@
-# README #
+# About the project:
+This repo contains the backend for the Barbr App
 
-This README would normally document whatever steps are necessary to get your application up and running.
+## Running using Docker:
 
-### What is this repository for? ###
+`docker-compose build`
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+`docker-compose up`
 
-### How do I get set up? ###
+## Setting up dev:
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+### Installing Postgres with Postgis
+Mac: 
+https://postgresapp.com/  
+This comes with Postgis by default
 
-### Contribution guidelines ###
+Linux:  
+Postgres: https://computingforgeeks.com/how-to-install-postgresql-13-on-ubuntu/  
+Postgis: https://postgis.net/install/
 
-* Writing tests
-* Code review
-* Other guidelines
+### Installing Python and dependencies:
 
-### Who do I talk to? ###
+Installing Pyenv to manage python versions  
+This is the best tool so far to manage multiple python versions
 
-* Repo owner or admin
-* Other community or team contact
+[Pyenv](https://github.com/pyenv/pyenv#installation)  
+[Linux installation](https://www.liquidweb.com/kb/how-to-install-pyenv-virtualenv-on-ubuntu-18-04/)
+
+Installing Python:
+
+`pyenv install 3.9.0`
+
+Installing Poetry to manage dependencies:
+
+[Poetry](https://python-poetry.org/docs/#installation)
+
+Creating virtualenv:
+
+`pyenv virtualenv 3.9.0 barbr`
+
+Activating virtualenv:
+
+`pyenv activate barbr`
+
+Clone the repository then:
+
+`cd barbr_backend/`
+
+Once the virtualenv is activated run  
+`poetry install`
+
+The command above will install all the required dependencies
+
+In order to override settings or add your environment specific settings you can create a `settings_local.py`
+file along with your `settings.py` file.
+Anything added to the `settings_local.py` will override the default settings.
+
+Running the services:
+
+`python manage.py runserver`
+
+#### Pre-commit hooks for code quality check
+Setting up pre-commit hooks, run:  
+`pre-commit install`
+
+This will add git pre-commit hooks to format your code, imports, style.  
+This is required to auto format your code before commit.  
+Without these checks no PR should be merged. 
