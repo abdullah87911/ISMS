@@ -1,68 +1,89 @@
-# About the project:
-This repo contains the backend for the Barbr App
+## Swatch ##
+```
+python -m vskit.scripts.swatch --input_table=<input_table> --database_name=<clientdb> --output_table=<output_table>
+```
 
-## Running using Docker:
+## TrendAnalysis ##
+```
+1) Activate virtualenv where vskit is installed ( i am using prod_vskit_361 ).
+2) To run trend analysis for ruroc, navigate to '/home/vantena/ruroc_workspace/trend_analysis' 
+3) Make sure you have trend_configs created for the client in json format ( i am using '/home/vantena/ruroc_workspace/trend_analysis/trend_configs' ).
+4) Run the following command: 
+  python -m vskit.scripts.trend_analysis --given_timeframe=<timeframe> --trend_config_json_path='/home/vantena/ruroc_workspace/trend_analysis/trend_configs/' run
 
-`docker-compose build`
+"""
+sample given_timeframe:
+	given_timeframe = '[
+   {
+      "end_date":"2021-02-28",
+      "name":"T1",
+      "start_date":"2020-03-01"
+   },
+   {
+      "end_date":"2020-02-28",
+      "name":"T2",
+      "start_date":"2019-09-01"
+   },
+   {
+      "end_date":"2019-08-31",
+      "name":"T3",
+      "start_date":"2017-08-01"
+   }
+]'
+"""
+```
 
-`docker-compose up`
+## PurchaseProb ##
+```
+python -m vskit.scripts.prob_to_purchase --config=<config> run
 
-## Setting up dev:
+"""
+sample config:
+	config = "{'input_data':{'features_data':
+	{
+	  'dataset_name': 'purchase_prob_demo',
+	  'source_type': 'bq',
+	  'table_name': 'CLUSTERING_FEATURES_MATRIX',
+	  
+	},'cluster_data':{
+	  'dataset_name': 'purchase_prob_demo',
+	  'source_type': 'bq',
+	  'table_name': 'CLUSTERING_CLUSTERS_ASSIGNMENT_TEMP',
+	  'columns':['account_id','cluster','features_id']
+	}},
+	'output_params': {'create_if_not_exists': True,
+	'dataset_name': 'purchase_prob_demo',
+	'drop_if_exists': True,
+	'table_name': 'CLUSTERING_EXPERTS_PROB'}}"
+"""
 
-### Installing Postgres with Postgis
-Mac: 
-https://postgresapp.com/  
-This comes with Postgis by default
+```
 
-Linux:  
-Postgres: https://computingforgeeks.com/how-to-install-postgresql-13-on-ubuntu/  
-Postgis: https://postgis.net/install/
+## Warehouse ##
+```
+python -m vskit.scripts.warehouse --config=<config> run
 
-### Installing Python and dependencies:
+"""
+sample config:
+	config = "{'input_data':{'feature_lookup':
+        {
+          'dataset_name': 'warehouse_utility_dev',
+          'source_type': 'bq',
+          'table_name': 'feature_lookup',
+          'private_key': '/home/vantena/google/testing_dev.json',
+        },'level_lookup':{
+          'dataset_name': 'warehouse_utility_dev',
+          'source_type': 'bq',
+          'table_name': 'level_lookup',
+          'private_key': '/home/vantena/google/testing_dev.json',
+        }},
+     	'input_database_name':'warehouse_utility_dev',
+	    'env_private_key':'/home/vantena/google/testing_dev.json',
+	    'output_params': {'create_if_not_exists': True,
+	    'dataset_name': 'warehouse_utility_dev',
+	    'drop_if_exists': True,
+	    'private_key': '/home/vantena/google/testing_dev.json',
+	    'table_name': 'warehouse_output'}}""
+"""
 
-Installing Pyenv to manage python versions  
-This is the best tool so far to manage multiple python versions
-
-[Pyenv](https://github.com/pyenv/pyenv#installation)  
-[Linux installation](https://www.liquidweb.com/kb/how-to-install-pyenv-virtualenv-on-ubuntu-18-04/)
-
-Installing Python:
-
-`pyenv install 3.9.0`
-
-Installing Poetry to manage dependencies:
-
-[Poetry](https://python-poetry.org/docs/#installation)
-
-Creating virtualenv:
-
-`pyenv virtualenv 3.9.0 barbr`
-
-Activating virtualenv:
-
-`pyenv activate barbr`
-
-Clone the repository then:
-
-`cd barbr_backend/`
-
-Once the virtualenv is activated run  
-`poetry install`
-
-The command above will install all the required dependencies
-
-In order to override settings or add your environment specific settings you can create a `settings_local.py`
-file along with your `settings.py` file.
-Anything added to the `settings_local.py` will override the default settings.
-
-Running the services:
-
-`python manage.py runserver`
-
-#### Pre-commit hooks for code quality check
-Setting up pre-commit hooks, run:  
-`pre-commit install`
-
-This will add git pre-commit hooks to format your code, imports, style.  
-This is required to auto format your code before commit.  
-Without these checks no PR should be merged. 
+```
